@@ -3,7 +3,10 @@ import GameElement from "../elements/element";
 import GameScreen from "./screen";
 import Game from "../game";
 import MiningSection from "../elements/mining_section";
-import Clickable, { isClickable } from "../clickable";
+import { isClickable } from "../clickable";
+import BuildingSection from "../elements/building_section";
+import ResearchSection from "../elements/research_section";
+import InfoSection from "../elements/info_section";
 
 class InGameScreen extends GameScreen {
   game: Game;
@@ -13,8 +16,18 @@ class InGameScreen extends GameScreen {
     super();
     this.game = game;
 
+    const halfWidth = game.windowWidth / 2;
+    const halfHeight = game.windowHeight / 2;
+
+    this.addElement(new MiningSection(game, 0, 0, halfWidth, halfHeight));
     this.addElement(
-      new MiningSection(0, 0, game.windowWidth / 2, game.windowHeight / 2)
+      new BuildingSection(game, halfWidth, 0, halfWidth, halfHeight)
+    );
+    this.addElement(
+      new ResearchSection(game, 0, halfHeight, halfWidth, halfHeight)
+    );
+    this.addElement(
+      new InfoSection(game, halfWidth, halfHeight, halfWidth, halfHeight)
     );
   }
 
@@ -38,7 +51,6 @@ class InGameScreen extends GameScreen {
     for (const element of this.elements) {
       if (isClickable(element)) {
         element.onMouseClick(x, y);
-        console.log("Clickable!");
       }
     }
   }

@@ -4,7 +4,7 @@ import Clickable from "../clickable";
 import GameSection from "./game_section";
 import Game from "../game";
 
-class MiningSection extends GameSection implements Clickable {
+class ResearchSection extends GameSection implements Clickable {
   clickSection: ClickSection;
 
   constructor(game: Game, x: number, y: number, width: number, height: number) {
@@ -16,22 +16,22 @@ class MiningSection extends GameSection implements Clickable {
       width / 2,
       height / 2,
       this.onMine.bind(this),
-      game.settings.miningInteractionDelay
+      game.settings.researchInteractionDelay
     );
   }
 
   onMine(): void {
-    this.game.playerCompany.mineMaterials();
+    this.game.playerCompany.researchAI();
   }
 
   override render(p5: p5): void {
-    p5.fill(150, 150, 250);
+    p5.fill(200, 250, 150);
     p5.rect(this.x, this.y, this.width, this.height);
-    this.clickSection.render(p5, Game.assets.rockImage);
+    this.clickSection.render(p5, Game.assets.bottleImage);
   }
 
   override update(): void {
-    // Implement update logic for the mining section
+    // Implement update logic for the building section
   }
 
   onMouseClick(x: number, y: number): void {
@@ -39,4 +39,4 @@ class MiningSection extends GameSection implements Clickable {
   }
 }
 
-export default MiningSection;
+export default ResearchSection;
