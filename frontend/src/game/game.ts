@@ -3,36 +3,94 @@ import Company from "./company";
 import GameSettings from "./game_settings";
 import InGameScreen from "./screens/ingame_screen";
 import GameScreen from "./screens/screen";
+import Timer from "./timer";
 
 class Game {
-  //   settings: GameSettings;
+  static assets: {
+    rockImage?: p5.Image;
+    dataCenterImage?: p5.Image;
+    bottleImage?: p5.Image;
+  } = {};
+
+  static assetsLoaded: boolean = false;
+
+  static loadAssets(p5: p5): void {
+    let loaded = 0;
+    const total = 3;
+
+    p5.loadImage("assets/rock.png", (img) => {
+      Game.assets.rockImage = img;
+      loaded++;
+
+      if (loaded === total) {
+        Game.assetsLoaded = true;
+      }
+    });
+
+    p5.loadImage("assets/data_center.png", (img) => {
+      Game.assets.dataCenterImage = img;
+      loaded++;
+
+      if (loaded === total) {
+        Game.assetsLoaded = true;
+      }
+    });
+
+    p5.loadImage("assets/bottle.png", (img) => {
+      Game.assets.bottleImage = img;
+      loaded++;
+
+      if (loaded === total) {
+        Game.assetsLoaded = true;
+      }
+    });
+  }
+
+  p5: p5;
+  settings: GameSettings;
   windowWidth: number;
   windowHeight: number;
-  //   currentDay: number;
-  //   globalWaterLevel: number;
-  //   companies: Company[];
+  currentDay: number;
+  globalWaterLevel: number;
+  playerCompany: Company;
+  companies: Company[];
 
   currentScreen: GameScreen;
+  payTimer: Timer;
 
-  //   constructor(settings: GameSettings) {
-  //     this.settings = settings;
-  //     this.currentDay = settings.startingDay;
-  //     this.globalWaterLevel = settings.startingWaterLevel;
-  //     this.companies = [];
+  gameTime: number;
+  dayTimeDelta: number;
+  dayTimer: Timer;
 
-  //     this.currentScreen = new InGameScreen(this);
-  //   }
-
-  constructor(windowWidth: number, windowHeight: number) {
+  constructor(p5: p5, windowWidth: number, windowHeight: number) {
+    this.p5 = p5;
+    this.settings = new GameSettings();
     this.windowWidth = windowWidth;
     this.windowHeight = windowHeight;
+    this.currentDay = this.settings.startingDay;
+    this.globalWaterLevel = this.settings.startingWaterLevel;
+    this.playerCompany = new Company("Player Company", this);
+    this.companies = [];
+
     this.currentScreen = new InGameScreen(this);
+
+    this.payTimer = new Timer(
+      this.settings.payInterval,
+      this.payCompanies.bind(this)
+    );
+
+    this.gameTime = this.settings.dayStartTime;
+    this.dayTimeDelta = this.settings.dayEndTime - this.settings.dayStartTime;
+    this.dayTimer = new Timer(3000, this.tickTime.bind(this));
   }
 
   runGame(p5: p5): void {
     if (this.isWaterEmpty()) {
       // Handle game over logic
     }
+
+    this.payTimer.runTimer();
+    this.dayTimer.runTimer();
 
     this.currentScreen.update();
     this.currentScreen.render(p5);
@@ -46,22 +104,42 @@ class Game {
     this.currentScreen.onKeyPress(key);
   }
 
-  //   incrementDay(): void {
-  //     this.currentDay++;
-  //   }
+  payCompanies(): void {
+    this.playerCompany.generateRevenue();
 
-  isWaterEmpty(): boolean {
-    return false;
-    //   return this.globalWaterLevel <= 0;
+    for (const company of this.companies) {
+      company.generateRevenue();
+    }
   }
 
-  //   drainWater(amount: number): void {
-  //     this.globalWaterLevel -= amount;
+  tickTime(): void {
+    if (this.gameTime >= this.settings.dayEndTime) {
+      this.startNewDay();
+    } else {
+      this.gameTime += 1;
+    }
+  }
 
-  //     if (this.globalWaterLevel < 0) {
-  //       this.globalWaterLevel = 0;
-  //     }
-  //   }
+  startNewDay(): void {
+    this.incrementDay();
+    this.gameTime = this.settings.dayStartTime;
+  }
+
+  incrementDay(): void {
+    this.currentDay++;
+  }
+
+  isWaterEmpty(): boolean {
+    return this.globalWaterLevel <= 0;
+  }
+
+  drainWater(amount: number): void {
+    this.globalWaterLevel -= amount;
+
+    if (this.globalWaterLevel < 0) {
+      this.globalWaterLevel = 0;
+    }
+  }
 }
 
 export default Game;

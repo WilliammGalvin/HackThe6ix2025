@@ -24,9 +24,9 @@ const P5Canvas = () => {
           const w = canvasParent.clientWidth;
           const h = canvasParent.clientHeight;
 
-          game = new Game(w, h);
-
+          Game.loadAssets(p);
           p.createCanvas(w, h).parent(canvasParent);
+          game = new Game(p, w, h);
         };
 
         p.windowResized = () => {
