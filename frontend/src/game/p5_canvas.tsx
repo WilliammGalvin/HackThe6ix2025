@@ -3,10 +3,12 @@
 import { useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import type p5 from "p5";
+import Game from "./game";
 
 const P5Canvas = () => {
   const sketchRef = useRef<HTMLDivElement>(null);
   let p5Instance: p5 | undefined;
+  let game: Game | undefined;
 
   useEffect(() => {
     let mounted = true;
@@ -22,7 +24,9 @@ const P5Canvas = () => {
           const w = canvasParent.clientWidth;
           const h = canvasParent.clientHeight;
 
-          p.createCanvas(w, h);
+          game = new Game(w, h);
+
+          p.createCanvas(w, h).parent(canvasParent);
         };
 
         p.windowResized = () => {
@@ -32,9 +36,14 @@ const P5Canvas = () => {
         };
 
         p.draw = () => {
-          p.background(240);
-          p.fill(100, 100, 255);
-          p.ellipse(p.mouseX, p.mouseY, 50, 50);
+          p.background(200);
+          game?.runGame(p);
+        };
+
+        p.mouseClicked = () => {
+          if (game) {
+            game.onMouseClick(p.mouseX, p.mouseY);
+          }
         };
       };
 
@@ -49,7 +58,6 @@ const P5Canvas = () => {
     };
   }, []);
 
-  // 🔧 Set the parent container to take available space
   return (
     <div
       ref={sketchRef}
@@ -57,6 +65,7 @@ const P5Canvas = () => {
         width: "100%",
         height: "100%",
         position: "relative",
+        pointerEvents: "auto",
       }}
     />
   );
