@@ -3,9 +3,11 @@ import ClickSection from "../click_section";
 import Clickable from "../clickable";
 import GameSection from "./game_section";
 import Game from "../game";
+import ProgressBarComp from "./progress_bar";
 
 class MiningSection extends GameSection implements Clickable {
   clickSection: ClickSection;
+  progressBar: ProgressBarComp;
 
   constructor(game: Game, x: number, y: number, width: number, height: number) {
     super(game, x, y, width, height);
@@ -18,6 +20,14 @@ class MiningSection extends GameSection implements Clickable {
       this.onMine.bind(this),
       game.settings.miningInteractionDelay
     );
+
+    this.progressBar = new ProgressBarComp(
+      x + 10,
+      y + height - 30,
+      width - 20,
+      20,
+      this.clickSection.interactionTimer
+    );
   }
 
   onMine(): void {
@@ -28,6 +38,7 @@ class MiningSection extends GameSection implements Clickable {
     p5.fill(150, 150, 250);
     p5.rect(this.x, this.y, this.width, this.height);
     this.clickSection.render(p5, Game.assets.rockImage);
+    this.progressBar.render(p5);
   }
 
   override update(): void {
