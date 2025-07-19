@@ -1,14 +1,22 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import type p5 from "p5";
 import Game from "./game";
+import StartSettings from "./start_settings";
 
-const P5Canvas = () => {
+const P5Canvas = ({
+  startSettings,
+  onGameEnd,
+}: {
+  startSettings: StartSettings;
+  onGameEnd: () => void;
+}) => {
   const sketchRef = useRef<HTMLDivElement>(null);
   let p5Instance: p5 | undefined;
   let game: Game | undefined;
+  const [hasGameEnded, setHasGameEnded] = useState<boolean>(false);
 
   useEffect(() => {
     let mounted = true;
@@ -26,7 +34,7 @@ const P5Canvas = () => {
 
           Game.loadAssets(p);
           p.createCanvas(w, h).parent(canvasParent);
-          game = new Game(p, w, h);
+          game = new Game(p, startSettings, w, h);
         };
 
         p.windowResized = () => {
@@ -36,6 +44,14 @@ const P5Canvas = () => {
         };
 
         p.draw = () => {
+          if (!game || hasGameEnded) return;
+
+          if (!hasGameEnded && game.hasGameEnded) {
+            setHasGameEnded(true);
+            onGameEnd();
+            return;
+          }
+
           p.background(200);
           game?.runGame(p);
         };

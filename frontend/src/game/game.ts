@@ -5,6 +5,7 @@ import InGameScreen from "./screens/ingame_screen";
 import GameScreen from "./screens/screen";
 import Timer from "./timer";
 import CompanyAI from "./company_ai";
+import StartSettings from "./start_settings";
 
 class Game {
   static assets: {
@@ -63,14 +64,21 @@ class Game {
   dayTimeDelta: number;
   dayTimer: Timer;
 
-  constructor(p5: p5, windowWidth: number, windowHeight: number) {
+  hasGameEnded: boolean = false;
+
+  constructor(
+    p5: p5,
+    startSettings: StartSettings,
+    windowWidth: number,
+    windowHeight: number
+  ) {
     this.p5 = p5;
     this.settings = new GameSettings();
     this.windowWidth = windowWidth;
     this.windowHeight = windowHeight;
     this.currentDay = this.settings.startingDay;
     this.globalWaterLevel = this.settings.startingWaterLevel;
-    this.playerCompany = new Company("Player Company", this);
+    this.playerCompany = new Company(startSettings.companyName, this);
 
     this.companiesAIs = Array.from(
       { length: this.settings.maxCompanies },
@@ -94,10 +102,14 @@ class Game {
   }
 
   runGame(p5: p5): void {
-    if (!this.isWaterEmpty()) {
-      this.update();
+    if (this.hasGameEnded) return;
+
+    if (this.isWaterEmpty()) {
+      this.hasGameEnded = true;
+      return;
     }
 
+    this.update();
     this.render(p5);
   }
 
