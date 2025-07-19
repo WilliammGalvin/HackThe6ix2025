@@ -43,6 +43,24 @@ class InfoSection extends GameSection {
     text.forEach((text, index) => {
       p5.text(text, this.x + 10, this.y + 10 + index * 20);
     });
+
+    p5.textAlign(p5.RIGHT, p5.TOP);
+    p5.text("Company Leaderboard", this.x + this.width - 10, this.y + 10);
+    let allCompanies = [
+      ...this.game.companiesAIs.map((c) => c.company),
+      this.game.playerCompany,
+    ];
+    allCompanies.sort((a, b) => b.cash - a.cash);
+
+    allCompanies.forEach((company, index) => {
+      if (index >= 10) return;
+
+      p5.text(
+        company.name + ": " + formatCurrency(company.cash),
+        this.x + this.width - 10,
+        this.y + 30 + index * 20
+      );
+    });
   }
 
   override update(): void {

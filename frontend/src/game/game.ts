@@ -4,6 +4,7 @@ import GameSettings from "./game_settings";
 import InGameScreen from "./screens/ingame_screen";
 import GameScreen from "./screens/screen";
 import Timer from "./timer";
+import CompanyAI from "./company_ai";
 
 class Game {
   static assets: {
@@ -53,10 +54,10 @@ class Game {
   currentDay: number;
   globalWaterLevel: number;
   playerCompany: Company;
-  companies: Company[];
+  companiesAIs: CompanyAI[];
 
   currentScreen: GameScreen;
-  payTimer: Timer;
+  playerPayTimer: Timer;
 
   gameTime: number;
   dayTimeDelta: number;
@@ -70,14 +71,22 @@ class Game {
     this.currentDay = this.settings.startingDay;
     this.globalWaterLevel = this.settings.startingWaterLevel;
     this.playerCompany = new Company("Player Company", this);
-    this.companies = [];
+
+    this.companiesAIs = Array.from(
+      { length: this.settings.maxCompanies },
+      (_, i) => {
+        return new CompanyAI(
+          new Company(`Company ${i + 1}`, this),
+          this.settings
+        );
+      }
+    );
 
     this.currentScreen = new InGameScreen(this);
 
-    this.payTimer = new Timer(
-      this.settings.payInterval,
-      this.payCompanies.bind(this)
-    );
+    this.playerPayTimer = new Timer(this.settings.payInterval, () => {
+      this.playerCompany.generateRevenue();
+    });
 
     this.gameTime = this.settings.dayStartTime;
     this.dayTimeDelta = this.settings.dayEndTime - this.settings.dayStartTime;
@@ -85,14 +94,26 @@ class Game {
   }
 
   runGame(p5: p5): void {
-    if (this.isWaterEmpty()) {
-      // Handle game over logic
+    if (!this.isWaterEmpty()) {
+      this.update();
     }
 
-    this.payTimer.runTimer();
+    this.render(p5);
+  }
+
+  update(): void {
+    this.playerPayTimer.runTimer();
     this.dayTimer.runTimer();
 
+    for (const company of this.companiesAIs) {
+      company.runCompanyAI();
+    }
+
     this.currentScreen.update();
+  }
+
+  render(p5: p5): void {
+    p5.clear();
     this.currentScreen.render(p5);
   }
 
@@ -106,10 +127,6 @@ class Game {
 
   payCompanies(): void {
     this.playerCompany.generateRevenue();
-
-    for (const company of this.companies) {
-      company.generateRevenue();
-    }
   }
 
   tickTime(): void {

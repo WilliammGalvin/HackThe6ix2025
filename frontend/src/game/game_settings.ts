@@ -25,18 +25,26 @@ class GameSettings {
 }
 
 class CompanyAISettings {
-  miningSpeedDeviation: number;
-  buildingSpeedDeviation: number;
-  researchSpeedDeviation: number;
+  static miningSpeedDeviation: number = 5000;
+  static buildingSpeedDeviation: number = 7000;
+  static researchSpeedDeviation: number = 15000;
+  static payIntervalDeviation: number = 5000;
+
+  miningSpeed: number;
+  buildingSpeed: number;
+  researchSpeed: number;
+  payInterval: number;
 
   constructor(
-    miningSpeedDeviation: number,
-    buildingSpeedDeviation: number,
-    researchSpeedDeviation: number
+    miningSpeed: number,
+    buildingSpeed: number,
+    researchSpeed: number,
+    payInterval: number
   ) {
-    this.miningSpeedDeviation = miningSpeedDeviation;
-    this.buildingSpeedDeviation = buildingSpeedDeviation;
-    this.researchSpeedDeviation = researchSpeedDeviation;
+    this.miningSpeed = miningSpeed;
+    this.buildingSpeed = buildingSpeed;
+    this.researchSpeed = researchSpeed;
+    this.payInterval = payInterval;
   }
 }
 

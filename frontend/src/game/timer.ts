@@ -25,6 +25,11 @@ class Timer {
       this.reset();
     }
   }
+
+  getProgress(): number {
+    const progress = (Date.now() - this.last) / this.delay;
+    return Math.min(progress, 1);
+  }
 }
 
 export default Timer;
