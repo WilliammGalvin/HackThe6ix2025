@@ -28,7 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <nav className="flex w-full justify-between py-2 px-6 items-center">
+        <nav className="flex w-full justify-between py-2 px-6 items-center overflow-hidden">
           <Link href="/" className="text-center py-4">
             Thirst for Profit
           </Link>
