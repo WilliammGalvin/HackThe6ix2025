@@ -36,6 +36,15 @@ class InGameScreen extends GameScreen {
   }
 
   override render(p5: p5): void {
+    if (!Game.assetsLoaded) return;
+    p5.image(
+      Game.assets.backgroundImage!,
+      0,
+      0,
+      this.game.windowWidth,
+      this.game.windowHeight
+    );
+
     for (const element of this.elements) {
       element.render(p5);
     }

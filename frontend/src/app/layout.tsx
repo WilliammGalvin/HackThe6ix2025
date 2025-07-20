@@ -26,32 +26,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen relative`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen relative fullscreen-gradient`}
       >
-        <nav className="p-4 flex justify-center text-lg">
-          <div className="relative max-w-[750px] flex w-full justify-between px-6 items-center overflow-hidden border-1 border-[#292929] rounded-lg shadow-lg">
-            <div className="absolute top-0 left-0 w-full h-full bg-[#171717] opacity-35 rounded-lg z-0" />
-
-            <Link href="/" className="text-center py-4 z-10">
-              Thirst for Profit
-            </Link>
-
-            <ul className="flex gap-x-6 z-10">
-              <li>
-                <Link href="about">About</Link>
-              </li>
-
-              <li>
-                <Link href="petition">Petition</Link>
-              </li>
-
-              <li>
-                <Link href="login">Login</Link>
-              </li>
-            </ul>
-          </div>
-        </nav>
-
         {children}
       </body>
     </html>

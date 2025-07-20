@@ -1,6 +1,6 @@
 class GameSettings {
   startingDay: number = 1;
-  startingWaterLevel: number = 1000;
+  startingWaterLevel: number = 1000000;
   maxCompanies: number = 10;
   startingCash: number = 100;
   startingMaterials: number = 0;

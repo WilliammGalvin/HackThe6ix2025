@@ -27,10 +27,12 @@ class ProgressBarComp extends GameElement {
   override render(p5: p5): void {
     const progress = 1 - this.timer.getProgress();
 
-    p5.fill(0);
-    p5.rect(this.x, this.y, this.width, this.height);
-    p5.fill(100, 200, 100);
-    p5.rect(this.x, this.y, this.width * progress, this.height);
+    p5.stroke(0);
+    p5.strokeWeight(2);
+    p5.fill(255);
+    p5.rect(this.x, this.y, this.width, this.height, 5);
+    p5.fill(114, 224, 58);
+    p5.rect(this.x, this.y, this.width * progress, this.height, 5);
   }
 }
 

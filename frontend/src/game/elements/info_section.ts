@@ -10,55 +10,58 @@ class InfoSection extends GameSection {
   }
 
   override render(p5: p5): void {
-    p5.fill(116, 185, 255);
-    p5.rect(this.x, this.y, this.width, this.height);
+    super.render(p5);
 
     p5.fill(0);
-    p5.textSize(16);
+    p5.textSize(20);
     p5.textAlign(p5.LEFT, p5.TOP);
 
     let time = this.game.gameTime;
     time = time > 12 ? time - 12 : time;
 
-    const text = [
-      "Info Section",
-      "Materials: " + formatWholeNumber(this.game.playerCompany.materials),
-      "Revenue: " + formatCurrency(this.game.playerCompany.cash),
-      "Revenue per Cycle: " +
-        formatCurrency(this.game.playerCompany.getRevenuePerCycle()),
-      "Data Centers: " + this.game.playerCompany.dataCenters,
-      "Research Level: " +
-        AIResearchLadder[this.game.playerCompany.researchLevel],
-      "Water Drain per Cycle: " +
-        formatNumber(this.game.playerCompany.getWaterDrainRate()) +
-        " L",
-      "Current Time: " +
-        time +
-        ":00 " +
-        (this.game.gameTime >= 12 ? "PM" : "AM"),
-      "Current Day: " + formatWholeNumber(this.game.currentDay),
-      "Global Water: " + formatNumber(this.game.globalWaterLevel) + " L",
-    ];
+    p5.fill(244, 192, 72);
+    p5.text("Dashboard", this.x + 25, this.y + 40);
 
-    text.forEach((text, index) => {
-      p5.text(text, this.x + 10, this.y + 10 + index * 20);
-    });
+    p5.fill(255);
+    p5.text(
+      "Materials: " + formatWholeNumber(this.game.playerCompany.materials),
+      this.x + 25,
+      this.y + 80
+    );
+    p5.text(
+      "Revenue: " + formatCurrency(this.game.playerCompany.cash),
+      this.x + 25,
+      this.y + 115
+    );
+    p5.text(
+      "Research Level: " + this.game.playerCompany.researchLevel,
+      this.x + 25,
+      this.y + 150
+    );
+    p5.text("Current Day: " + this.game.currentDay, this.x + 25, this.y + 185);
+
+    p5.fill(0, 255, 144);
+    p5.text(
+      "Global Water: " + formatNumber(this.game.globalWaterLevel) + "L",
+      this.x + 25,
+      this.y + 220
+    );
 
     p5.textAlign(p5.RIGHT, p5.TOP);
-    p5.text("Company Leaderboard", this.x + this.width - 10, this.y + 10);
     let allCompanies = [
       ...this.game.companiesAIs.map((c) => c.company),
       this.game.playerCompany,
     ];
     allCompanies.sort((a, b) => b.cash - a.cash);
 
+    p5.fill(190);
     allCompanies.forEach((company, index) => {
-      if (index >= 10) return;
+      if (index >= 3) return;
 
       p5.text(
         company.name + ": " + formatCurrency(company.cash),
-        this.x + this.width - 10,
-        this.y + 30 + index * 20
+        this.x + this.width - 25,
+        this.y + 40 + index * 35
       );
     });
   }

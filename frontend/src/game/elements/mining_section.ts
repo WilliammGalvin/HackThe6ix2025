@@ -22,9 +22,9 @@ class MiningSection extends GameSection implements Clickable {
     );
 
     this.progressBar = new ProgressBarComp(
-      x + 10,
-      y + height - 30,
-      width - 20,
+      x + width * 0.3,
+      y + height - 45,
+      width * 0.4,
       20,
       this.clickSection.interactionTimer
     );
@@ -35,8 +35,7 @@ class MiningSection extends GameSection implements Clickable {
   }
 
   override render(p5: p5): void {
-    p5.fill(150, 150, 250);
-    p5.rect(this.x, this.y, this.width, this.height);
+    super.render(p5);
     this.clickSection.render(p5, Game.assets.rockImage);
     this.progressBar.render(p5);
   }

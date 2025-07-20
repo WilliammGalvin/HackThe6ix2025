@@ -12,15 +12,17 @@ class Game {
     rockImage?: p5.Image;
     dataCenterImage?: p5.Image;
     bottleImage?: p5.Image;
+    backgroundImage?: p5.Image;
+    silkscreenFont?: p5.Font;
   } = {};
 
   static assetsLoaded: boolean = false;
 
   static loadAssets(p5: p5): void {
     let loaded = 0;
-    const total = 3;
+    const total = 5;
 
-    p5.loadImage("assets/rock.png", (img) => {
+    p5.loadImage("/assets/ore.png", (img) => {
       Game.assets.rockImage = img;
       loaded++;
 
@@ -29,7 +31,7 @@ class Game {
       }
     });
 
-    p5.loadImage("assets/data_center.png", (img) => {
+    p5.loadImage("/assets/servers.png", (img) => {
       Game.assets.dataCenterImage = img;
       loaded++;
 
@@ -38,8 +40,26 @@ class Game {
       }
     });
 
-    p5.loadImage("assets/bottle.png", (img) => {
+    p5.loadImage("/assets/computer.png", (img) => {
       Game.assets.bottleImage = img;
+      loaded++;
+
+      if (loaded === total) {
+        Game.assetsLoaded = true;
+      }
+    });
+
+    p5.loadImage("/assets/game_bg.png", (img) => {
+      Game.assets.backgroundImage = img;
+      loaded++;
+
+      if (loaded === total) {
+        Game.assetsLoaded = true;
+      }
+    });
+
+    p5.loadFont("/fonts/silkscreen.ttf", (font) => {
+      Game.assets.silkscreenFont = font;
       loaded++;
 
       if (loaded === total) {
@@ -80,13 +100,23 @@ class Game {
     this.globalWaterLevel = this.settings.startingWaterLevel;
     this.playerCompany = new Company(startSettings.companyName, this);
 
+    const companyNames = [
+      "Vellum",
+      "QNX",
+      "Ribbon",
+      "TweleveLabs",
+      "Warp",
+      "Deloitte",
+      "Linear",
+      "Nokia",
+      "TKS",
+      "Awake",
+    ];
+
     this.companiesAIs = Array.from(
       { length: this.settings.maxCompanies },
       (_, i) => {
-        return new CompanyAI(
-          new Company(`Company ${i + 1}`, this),
-          this.settings
-        );
+        return new CompanyAI(new Company(companyNames[i], this), this.settings);
       }
     );
 
@@ -126,6 +156,11 @@ class Game {
 
   render(p5: p5): void {
     p5.clear();
+
+    if (Game.assets.silkscreenFont) {
+      p5.textFont(Game.assets.silkscreenFont!);
+    }
+
     this.currentScreen.render(p5);
   }
 

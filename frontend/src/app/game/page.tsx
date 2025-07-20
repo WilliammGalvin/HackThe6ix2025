@@ -32,10 +32,10 @@ export default function Home() {
 
   return (
     <main className="flex-1 flex flex-col">
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col p-8">
         {!hasGameAnimationStarted ? (
           hasGameStarted ? (
-            <div className="flex-1 w-full h-full relative">
+            <div className="flex-1 w-full h-full relative p-2 bg-black rounded-xl">
               <P5_canvas startSettings={startSettings!} onGameEnd={onGameEnd} />
             </div>
           ) : hasGameEnded ? (

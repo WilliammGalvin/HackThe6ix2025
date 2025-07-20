@@ -33,7 +33,13 @@ class ClickSection extends GameElement {
 
   override render(p5: p5, img?: p5.Image): void {
     if (Game.assetsLoaded && img) {
-      p5.image(img, this.x, this.y, this.width, this.height);
+      p5.image(
+        img,
+        this.x + 30,
+        this.y + 10,
+        this.width - 60,
+        this.height - 20
+      );
     }
   }
 
