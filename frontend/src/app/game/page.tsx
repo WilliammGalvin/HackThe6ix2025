@@ -4,19 +4,31 @@ import P5_canvas from "@/game/p5_canvas";
 import StartSettings from "@/game/start_settings";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { BiChevronLeft } from "react-icons/bi";
+import Link from "next/link";
 
 export default function Home() {
   const [hasGameStarted, setHasGameStarted] = useState<boolean>(false);
   const [hasGameAnimationStarted, setHasGameAnimationStarted] =
     useState<boolean>(false);
   const [hasGameEnded, setHasGameEnded] = useState<boolean>(false);
+  const [hasGameEndAnimationStarted, setHasGameEndAnimationStarted] =
+    useState<boolean>(false);
   const [startSettings, setStartSettings] = useState<StartSettings | null>(
     null
   );
 
+  const router = useRouter();
+
   const onGameEnd = () => {
-    setHasGameEnded(true);
-    setHasGameStarted(false);
+    setHasGameEndAnimationStarted(true);
+
+    setTimeout(() => {
+      setHasGameEnded(true);
+      setHasGameStarted(false);
+      setHasGameEndAnimationStarted(false);
+    }, 5000);
   };
 
   const startGame = (startSettings: StartSettings) => {
@@ -27,11 +39,30 @@ export default function Home() {
     setTimeout(() => {
       setHasGameStarted(true);
       setHasGameAnimationStarted(false);
-    }, 1000);
+    }, 2000);
   };
 
   return (
     <main className="flex-1 flex flex-col">
+      {hasGameEndAnimationStarted && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 5, ease: "easeInOut" }}
+          className="absolute top-0 left-0 w-screen h-screen bg-black z-10"
+        />
+      )}
+
+      <button
+        onClick={() => {
+          router.back();
+        }}
+        className="absolute top-8 left-8 flex items-center"
+      >
+        <BiChevronLeft className="w-8 h-8" />
+        <span>Back</span>
+      </button>
+
       <div className="flex-1 flex flex-col p-8">
         {!hasGameAnimationStarted ? (
           hasGameStarted ? (
@@ -99,11 +130,19 @@ function StartScreen({
 
 function EndScreen() {
   return (
-    <div className="text-center w-full h-full flex justify-center items-center">
-      <div>
-        <h2 className="font-semibold text-3xl mb-2">Game Over</h2>
-        <p className="text-lg">In this situation, nobody wins.</p>
+    <>
+      <div className="bg-black absolute top-0 left-0 z-0 w-screen h-screen" />
+      <Link href="/" className="absolute top-8 left-8 flex items-center">
+        <BiChevronLeft className="w-8 h-8" />
+        <span>Back</span>
+      </Link>
+
+      <div className="text-center w-full h-full flex justify-center items-center">
+        <div className="z-10">
+          <h2 className="font-semibold text-3xl mb-2">Game Over</h2>
+          <p className="text-lg">In this situation, nobody wins.</p>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

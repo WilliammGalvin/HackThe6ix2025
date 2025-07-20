@@ -132,14 +132,14 @@ class Game {
   }
 
   runGame(p5: p5): void {
-    if (this.hasGameEnded) return;
-
-    if (this.isWaterEmpty()) {
+    if (this.isWaterEmpty() && !this.hasGameEnded) {
       this.hasGameEnded = true;
-      return;
     }
 
-    this.update();
+    if (!this.hasGameEnded) {
+      this.update();
+    }
+
     this.render(p5);
   }
 
@@ -165,10 +165,12 @@ class Game {
   }
 
   onMouseClick(x: number, y: number): void {
+    if (this.hasGameEnded) return;
     this.currentScreen.onMouseClick(x, y);
   }
 
   onKeyPress(key: string): void {
+    if (this.hasGameEnded) return;
     this.currentScreen.onKeyPress(key);
   }
 

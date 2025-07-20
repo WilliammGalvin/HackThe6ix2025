@@ -3,11 +3,14 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [isAnimationStart, setIsAnimationStart] = useState(false);
   const [isAnimationEnd, setIsAnimationEnd] = useState(false);
   const [hideOverlay, setHideOverlay] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -48,13 +51,15 @@ export default function Home() {
             Thirst for Profit
           </h1>
 
-          <Link
-            href="/game"
+          <button
+            onClick={() => {
+              router.push("/game");
+            }}
             className="font-silkscreen text-3xl px-8 py-3 relative rounded-lg"
           >
             <div className="absolute top-0 left-0 w-full h-full bg-white opacity-60 rounded-lg z-0" />
             <span className="relative text-black z-10">Play game</span>
-          </Link>
+          </button>
 
           <div className="absolute bottom-12 left-1/2 -translate-x-1/2">
             <img
@@ -77,13 +82,15 @@ export default function Home() {
                 <span className="relative text-black z-10">Petition</span>
               </Link>
 
-              <Link
-                href="/resources"
+              <button
+                onClick={() => {
+                  router.push("/resources");
+                }}
                 className="font-silkscreen text-3xl px-8 py-3 relative rounded-lg"
               >
                 <div className="absolute top-0 left-0 w-full h-full bg-white opacity-60 rounded-lg z-0" />
                 <span className="relative text-black z-10">Resources</span>
-              </Link>
+              </button>
             </div>
 
             <Link
