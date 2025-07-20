@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden relative`}
       >
         <nav className="flex w-full justify-between py-2 px-6 items-center overflow-hidden">
           <Link href="/" className="text-center py-4">

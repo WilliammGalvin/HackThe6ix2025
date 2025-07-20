@@ -2,7 +2,6 @@
 
 import P5_canvas from "@/game/p5_canvas";
 import StartSettings from "@/game/start_settings";
-import Link from "next/link";
 import { useState } from "react";
 
 export default function Home() {
@@ -25,10 +24,6 @@ export default function Home() {
 
   return (
     <main className="w-screen h-screen flex flex-col">
-      <Link href="/" className="text-center py-4">
-        Thirst for Profit
-      </Link>
-
       <div className="flex-1">
         {hasGameStarted ? (
           <P5_canvas startSettings={startSettings!} onGameEnd={onGameEnd} />
