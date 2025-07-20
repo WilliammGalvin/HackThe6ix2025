@@ -10,10 +10,31 @@ export default function AuthCallback() {
 
     if (token) {
       console.log("Access Token:", token);
+
+      fetch("http://localhost:5173/petitions/verify-auth", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("Backend response:", data);
+
+          if (data.authorized) {
+            // ✅ Redirect to petition page
+            window.location.href = "/petition";
+          } else {
+            console.error("User is not authorized");
+          }
+        })
+        .catch((err) => {
+          console.error("Error contacting backend:", err);
+        });
     } else {
       console.error("No access token found in URL hash.");
     }
   }, []);
 
-  return <p>Token received. Check the console. :DDDDDDDDDDDDDDDDDDDDDDDDDDD</p>;
+  return <p>Token received. Sending to backend...</p>;
 }
