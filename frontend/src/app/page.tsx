@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function Home() {
   const [isAnimationStart, setIsAnimationStart] = useState(false);
   const [isAnimationEnd, setIsAnimationEnd] = useState(false);
+  const [hideOverlay, setHideOverlay] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -15,6 +17,10 @@ export default function Home() {
         setTimeout(() => {
           setIsAnimationEnd(true);
         }, 1000);
+
+        setTimeout(() => {
+          setHideOverlay(true);
+        }, 1200);
       }
     };
 
@@ -27,15 +33,19 @@ export default function Home() {
 
   return isAnimationEnd ? (
     <>
-      <motion.div
-        className="absolute w-screen h-screen top-0 left-0 bg-black"
-        initial={{ opacity: 1 }}
-        animate={{ opacity: 0 }}
-        transition={{ duration: 0.2, ease: "easeIn" }}
-      />
+      {!hideOverlay && (
+        <motion.div
+          className="absolute w-screen h-screen top-0 left-0 bg-black"
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 0 }}
+          transition={{ duration: 0.2, ease: "easeIn" }}
+        />
+      )}
 
       <main className="w-screen h-screen flex justify-center items-center text-center">
-        Hello, world!
+        <Link href="/game" className="">
+          Play game
+        </Link>
       </main>
     </>
   ) : (

@@ -29,12 +29,14 @@ const P5Canvas = ({
 
         p.setup = () => {
           canvasParent = sketchRef.current!;
-          const w = canvasParent.clientWidth;
-          const h = canvasParent.clientHeight;
+          requestAnimationFrame(() => {
+            const w = canvasParent.offsetWidth;
+            const h = canvasParent.offsetHeight;
 
-          Game.loadAssets(p);
-          p.createCanvas(w, h).parent(canvasParent);
-          game = new Game(p, startSettings, w, h);
+            Game.loadAssets(p);
+            p.createCanvas(w, h).parent(canvasParent);
+            game = new Game(p, startSettings, w, h);
+          });
         };
 
         p.windowResized = () => {
