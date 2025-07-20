@@ -122,7 +122,7 @@ const PetitionPage: React.FC = () => {
       )}
 
       {/* Show signatures list */}
-      <section className="w-full max-w-md bg-white p-4 rounded shadow-md overflow-auto max-h-96">
+    <section className="w-full max-w-md bg-white p-4 rounded-2xl shadow-md overflow-auto max-h-96">
         <h2 className="text-xl font-semibold mb-4">Signatures</h2>
         {signatures.length === 0 ? (
           <p className="text-gray-600">No signatures yet.</p>
