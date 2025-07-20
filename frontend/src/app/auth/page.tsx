@@ -22,6 +22,9 @@ export default function AuthCallback() {
           console.log("Backend response:", data);
 
           if (data.authorized) {
+            // ✅ Save token in cookie (expires in 1 day)
+            document.cookie = `token=${token}; path=/; max-age=${60 * 60 * 24}; secure; samesite=strict`;
+
             // ✅ Redirect to petition page
             window.location.href = "/petition";
           } else {

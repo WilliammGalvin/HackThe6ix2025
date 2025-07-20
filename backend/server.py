@@ -10,7 +10,7 @@ from flask_cors import CORS
 
 load_dotenv('info.env')
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:3000"])
+CORS(app, origins=["http://localhost:3000"], supports_credentials=True)
 app.register_blueprint(api_blueprint)   # 'routes' must be a Blueprint, not a module or function
 
 # MongoDB Setup
